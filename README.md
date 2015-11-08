@@ -2,6 +2,16 @@
 
 > Gp-parser allow us to parse .gp* files
 
+## Documentation help
+
+* http://dguitar.sourceforge.net/GP4format.html
+
+## Other References
+
+* https://github.com/CoderLine/alphaTab
+* https://github.com/pablot/GuitarProParser
+* https://github.com/supersheep/guitar-pro
+
 ## Requirements
 
 * node *
