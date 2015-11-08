@@ -20,8 +20,8 @@ module.exports = (function() {
   };
 
   /**
-   * Parses the headers out of a buffer  
-   * according to 
+   * Parses the headers out of a buffer
+   * according to
    *
    * @private
    * @param Buffer
