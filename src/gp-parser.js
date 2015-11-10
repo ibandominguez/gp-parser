@@ -21,7 +21,9 @@ module.exports = (function() {
    *
    * @void
    */
-  var GPParser = function() {};
+  var GPParser = function() {
+    this.parseCount = 0;
+  };
 
   /**
    * Handles the main buffers and
@@ -33,8 +35,11 @@ module.exports = (function() {
    * @return object
    */
   GPParser.prototype.parse = function(dataBuff) {
+    this.byteCounter = 0;
+    this.parseCount++;
+
     return {
-      headers: parseHeaders(dataBuff)
+      headers: parseHeaders.call(this, dataBuff)
     };
   };
 
@@ -47,22 +52,22 @@ module.exports = (function() {
    * @return object
    */
   function parseHeaders(dataBuff) {
-    var iPoint = 0, headers = {};
+    var self = this, headers = {};
 
     // first byte off [0], since we know the version length
     // get the next 24 bytes for title [1, 25]
     // http://dguitar.sourceforge.net/GP4format.html#Version
-    iPoint = iPoint + 1;
-    headers.version = dataBuff.toString('utf8', iPoint, iPoint + 24);
-    iPoint = iPoint + 24;
+    self.byteCounter = self.byteCounter + 1;
+    headers.version = dataBuff.toString('utf8', self.byteCounter, self.byteCounter + 24);
+    self.byteCounter = self.byteCounter + 24;
 
     // skip 10 http://dguitar.sourceforge.net/GP4format.html#Information_About_the_Piece
     // Loop through all titles
-    iPoint = iPoint + 10;
+    self.byteCounter = self.byteCounter + 10;
     headerKeys.map(function(key) {
-      var l = dataBuff.readUIntLE(iPoint);
-      headers[key] = dataBuff.toString('utf8', iPoint + 1, iPoint + 1 + l);
-      iPoint = iPoint + 1 + l + WL;
+      var l = dataBuff.readUIntLE(self.byteCounter);
+      headers[key] = dataBuff.toString('utf8', self.byteCounter + 1, self.byteCounter + 1 + l);
+      self.byteCounter = self.byteCounter + 1 + l + WL;
     });
 
     return headers;
